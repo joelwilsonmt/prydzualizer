@@ -45,6 +45,11 @@ export class AudioEngine {
   }
 
   async startMic(): Promise<void> {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      throw new Error(
+        'Microphone access requires HTTPS. Please open this page over a secure connection.'
+      );
+    }
     this.stop();
     const ctx = this.createContext();
     if (ctx.state === 'suspended') {

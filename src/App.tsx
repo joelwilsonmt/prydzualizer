@@ -17,6 +17,7 @@ export default function App() {
   const [transitionAlpha, setTransitionAlpha] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(true);
+  const [audioError, setAudioError] = useState<string | null>(null);
 
   // Toggle browser fullscreen
   const toggleFullscreen = useCallback(async () => {
@@ -117,10 +118,13 @@ export default function App() {
       setAudioMode(null);
     } else {
       try {
+        setAudioError(null);
         await engine.startMic();
         setIsAudioActive(true);
         setAudioMode('mic');
       } catch (err) {
+        const msg = err instanceof Error ? err.message : 'Mic access denied';
+        setAudioError(msg);
         console.error('Mic access failed:', err);
       }
     }
@@ -160,6 +164,7 @@ export default function App() {
         transitionAlpha={transitionAlpha}
         showControls={showControls}
         isFullscreen={isFullscreen}
+        audioError={audioError}
         onMicToggle={handleMicToggle}
         onFileSelect={handleFileSelect}
         onPrev={() => sceneManagerRef.current?.prevScene()}

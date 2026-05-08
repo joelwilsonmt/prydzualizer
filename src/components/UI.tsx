@@ -8,6 +8,7 @@ interface UIProps {
   transitionAlpha: number;
   showControls: boolean;
   isFullscreen: boolean;
+  audioError: string | null;
   onMicToggle: () => void;
   onFileSelect: (file: File) => void;
   onPrev: () => void;
@@ -23,6 +24,7 @@ export function UI({
   transitionAlpha,
   showControls,
   isFullscreen,
+  audioError,
   onMicToggle,
   onFileSelect,
   onPrev,
@@ -194,7 +196,15 @@ export function UI({
           </div>
         </div>
 
-        {!isAudioActive && (
+        {audioError && (
+          <div className="absolute bottom-20 left-0 right-0 flex justify-center pointer-events-none">
+            <span className="font-mono text-xs tracking-widest" style={{ color: 'rgba(255,80,80,0.85)' }}>
+              {audioError}
+            </span>
+          </div>
+        )}
+
+        {!isAudioActive && !audioError && (
           <div className="absolute bottom-20 left-0 right-0 flex justify-center pointer-events-none">
             <span className="font-mono text-xs tracking-widest" style={{ color: 'rgba(255,255,255,0.15)' }}>
               drop audio file or tap mic
